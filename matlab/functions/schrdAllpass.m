@@ -7,7 +7,7 @@ function Y = schrdAllpass(X, g, M, rolloff)
     %   rolloff : (optional) threshold in dB decay to trim the returned 
     %             buffer. Default -60 dB (~99.9% energy).
     %   OUTPUT
-    %   Y : output signal, equal in size to X (TBD)
+    %   Y : output signal, same size as X, unless rolloff is specified
     
     % calculate group delay of an IIR filter
     %     Välimäki, V., Abel, J. S., & Smith, J. O. (2009). 
