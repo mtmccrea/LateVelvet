@@ -1,6 +1,6 @@
 function [Adiff, Bdiff, Acolor, Bcolor] = GenDiffFilters(H1A,H1B,N,fc_range, fb_range, G_range ,fs, HS, HSfc, HSg )
 
-    % [Adiff, Bdiff, Acolor, Bcolor] = GenDiffFilters(H1A,H1B,N)
+    % [Adiff, Bdiff, Acolor, Bcolor] = GenDiffFilters(H1A,H1B,N,fc_range, fb_range, G_range ,fs, HS, HSfc, HSg )
     % INPUT 
     % H1A : numerator  filter coefficients of the all-pole filter
     % H1B : denominator filter coefficients of the all-pole filter
