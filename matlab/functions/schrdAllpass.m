@@ -29,7 +29,11 @@ function Y = schrdAllpass(X, g, M, rolloff)
         "IR length at " + (round(P, 1)) + "% decay: "+round(delay)+ " samples")
 
     xN = length(X);
-    outN = xN + delay;
+    if nargin < 4
+        outN = xN;
+    else
+        outN = xN + delay;
+    end
     Y = zeros(outN, 1);    % output buffer
     
     % pad the input to match output size
