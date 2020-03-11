@@ -25,8 +25,7 @@ function Y = schrdAllpass(X, g, M, rolloff)
     delay = (log(1 - P) - log(1-g^2)) / log(g^2); % - 1;
     delay = ceil(delay * M); % account for AP order
     delay = ceil(delay * 1.35); % magic number 
-    display(...
-        "IR length at " + (round(P, 1)) + "% decay: "+round(delay)+ " samples")
+%     display("IR length at " + (round(P, 1)) + "% decay: "+round(delay)+ " samples")
 
     xN = length(X);
     if nargin < 4
