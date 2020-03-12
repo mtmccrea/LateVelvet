@@ -22,9 +22,9 @@ function [Adiff, Bdiff, Acolor, Bcolor] = GenDiffFilters(H1A,H1B,N,fc_range, fb_
     
     
     % create parameter ranges
-    fc = linspace(fc_range(2),fc_range(1), N-1); 
-    fb = linspace(fb_range(2),fb_range(1), N-1);  
-    G = linspace(G_range(2),G_range(1), N-1);
+    fc = linspace(fc_range(1),fc_range(2), N-1); 
+    fb = linspace(fb_range(1),fb_range(2), N-1);  
+    G = linspace(G_range(1),G_range(2), N-1);
 
     % Initialize output arguments 
     Bdiff = zeros(3,N);
@@ -33,7 +33,6 @@ function [Adiff, Bdiff, Acolor, Bcolor] = GenDiffFilters(H1A,H1B,N,fc_range, fb_
     Bcolor = cell(1,N);
     Acolor(: ,1)  = {H1A};
     Bcolor(: ,1)  = {H1B};
-    
     
 
     % calculate and plot the coloration filter of each segment 
@@ -53,11 +52,8 @@ function [Adiff, Bdiff, Acolor, Bcolor] = GenDiffFilters(H1A,H1B,N,fc_range, fb_
 %    
     end
 
-if HS == true 
-   
-
+    if HS == true 
             wc = 2*pi*fc/fs; % Crossover frequency in radians
-
             GH = db2mag(HSg); % convert HS gain to magnitude
              [aHS,bHS] = firstordShelfcoeff(GH,wc,HS); 
     for m = 2 : size(Acolor,2)
