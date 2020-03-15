@@ -17,7 +17,7 @@ figure(1);
 subplot(3,1,1)
 semilogx(W*fs/(2*pi), mag2db(abs(H)) + gain_offsets(1),...
     'Color', rgb(1,:), 'LineWidth', 1.2);
-ylabel('Magnitude'); %xlabel('Frequency');
+ylabel('Magnitude  (dB)'); %xlabel('Frequency');
 set(gca,'XTick',[125 250 500 1000 2000 4000 8000 16000]')    % Frequency points
 set(gca,'YTick',[-100 -50 0  ]') % dB scale
 axis([45 22500 -100 10])  %Scaling of axes
@@ -35,7 +35,7 @@ for n = 1:size(Adiff,2)
     H1 = H1 ./ H1(1);
     hold on
 end
-ylabel('Magnitude');%xlabel('Frequency');
+ylabel('Magnitude (dB)');%xlabel('Frequency');
 set(gca,'XTick',[125 250 500 1000 2000 4000 8000 16000 ]')    % Frequency points
 set(gca,'YTick',[-10 -5 0  ]') % dB scale
 axis([45 22500 -8 1])  %Scaling of axes
@@ -51,7 +51,6 @@ semilogx(W*fs/(2*pi), mag2db(abs(H)) + gain_offsets(1),...
 hold on
 
 for n = 1 : size(Acolor,2)
-    n
     [H2,W2] = freqz(Bcolor{n},Acolor{n});
     H2 = H2 ./ H2(1);
     semilogx( ...
@@ -64,7 +63,7 @@ end
 % colormap(rgb(2:end, :));
 
 plotSettings();
-ylabel('Magnitude');xlabel('Frequency');
+ylabel('Magnitude (dB)');xlabel('Frequency (Hz)');
 set(gca,'XTick',[125 250 500 1000 2000 4000 8000 16000]')    % Frequency points
 set(gca,'YTick',[-100 -50 0  ]') % dB scale
 axis([45 22500 -100 10])  %Scaling of axes
