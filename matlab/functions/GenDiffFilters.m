@@ -1,4 +1,4 @@
-function [Adiff, Bdiff, Acolor, Bcolor] = GenDiffFilters(H1A,H1B,N,fc_range, fb_range, G_range ,fs, HS, HSfc, HSg )
+function [Adiff, Bdiff, Acolor, Bcolor] = genDiffFilters(H1A, H1B, N, fc_range, fb_range, G_range, fs, LP )
 
     % [Adiff, Bdiff, Acolor, Bcolor] = GenDiffFilters(H1A,H1B,N,fc_range, fb_range, G_range ,fs, HS, HSfc, HSg )
     % INPUT 
@@ -9,9 +9,8 @@ function [Adiff, Bdiff, Acolor, Bcolor] = GenDiffFilters(H1A,H1B,N,fc_range, fb_
     % fb_range : vector of bandwith range , 1x2 
     % G_range : vector of gain range, 1x2
     % fs : sample frequency [Hz]
-    % HS : for == true , function cascades color filter with high shelf filter 
-    % HSfc : HS cross over frequency [Hz]
-    % HSg : HS gain 
+    % LP : for == true, a LP filter is added to the filter cascade,
+    %      following fc_range (not ideal for efficiency, currently LP is 14th order)
     % OUTPUT
     % Adiff : matrix of denominator filter coefficients , size(3,N-1)
     % Bdiff : matrix of numerator filter coefficients , size(3,N-1)
@@ -20,48 +19,46 @@ function [Adiff, Bdiff, Acolor, Bcolor] = GenDiffFilters(H1A,H1B,N,fc_range, fb_
     %
     % This function uses the function diffFiltCoeff.m
     
-    
     % create parameter ranges
-    fc = linspace(fc_range(1),fc_range(2), N-1); 
-    fb = linspace(fb_range(1),fb_range(2), N-1);  
-    G = linspace(G_range(1),G_range(2), N-1);
+    fc = linspace(fc_range(1), fc_range(2), N-1); 
+    fb = linspace(fb_range(1), fb_range(2), N-1);  
+    G  = linspace(G_range(1),  G_range(2),  N-1);
 
     % Initialize output arguments 
-    Bdiff = zeros(3,N);
-    Adiff = zeros(3,N);
+    Bdiff  = zeros(3,N);
+    Adiff  = zeros(3,N);
     Acolor = cell(1,N);
     Bcolor = cell(1,N);
-    Acolor(: ,1)  = {H1A};
-    Bcolor(: ,1)  = {H1B};
-    
+    Acolor(:, 1)  = { H1A };
+    Bcolor(:, 1)  = { H1B };
 
-    % calculate and plot the coloration filter of each segment 
-    for n = 1 : N-1 
-        
+    % initialize recursive filter
+    b1 = H1B;
+    a1 = H1A;  
+
+    % calculate the coloration filter of each segment 
+    for n = 1:N-1 
+        % individual differential filter
         [atot, btot] = diffFiltCoeff(fb(n), fc(n), G(n), fs);
-        [H1,W1] = freqz(btot,atot);
-        hold on
-        b1 = conv(H1B,btot);
-        a1 = conv(H1A,atot);
-        Bdiff(:,n) = btot;
-        Adiff(:,n) = atot;
-        Acolor(: ,n+1)  = {a1};
-        Bcolor(: ,n+1)  = {b1};
-        H1B = b1;
-        H1A = a1;
-%    
+        Bdiff(:, n) = btot; % save for plotting
+        Adiff(:, n) = atot;
+        
+        % full coloration filter (cascade) to be used on each segment
+        b1 = conv(b1, btot);
+        a1 = conv(a1, atot);
+        Acolor(:, n+1) = { a1 }; % save for plotting
+        Bcolor(:, n+1) = { b1 };
     end
 
-    if HS == true 
-            wc = 2*pi*fc/fs; % Crossover frequency in radians
-            GH = db2mag(HSg); % convert HS gain to magnitude
-             [aHS,bHS] = firstordShelfcoeff(GH,wc,HS); 
-    for m = 2 : size(Acolor,2)
-            
-            a2 = conv(Acolor{m},aHS)
-            b2 = conv(Bcolor{m},bHS)
-            Acolor(: ,m)  = {a2};
-            Bcolor(: ,m)  = {b2};
-            
+    if LP == true
+        for m = 2:N
+            lpFilt = designfilt('lowpassfir',...
+                'FilterOrder', 14, ...
+                'CutoffFrequency', fc(m-1)+2000, ...
+                'SampleRate', fs ...
+            );
+            b2 = conv(Bcolor{m}, lpFilt.Coefficients);
+            Bcolor(:, m) = { b2 };
+        end
     end
 end

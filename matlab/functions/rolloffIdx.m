@@ -1,13 +1,13 @@
 function [idxs, freqs, vals] = rolloffIdx(mags, rolloff, min_freq, Fs)
     % idxs = rolloffIdx(mags, rolloff, min_freq, Fs)
-    %          INPUTS
+    %   INPUTS
     %            mags : column-major matrix of NORMALIZED spectral magnitudes
     %         rolloff : dB level to search for in rolloff countour
     %        min_freq : search above this frequency (shrink the search space)
     % freq_resolution : number of points comprising the full magnitude
     %                   spectrum
     %              Fs : sample rate
-    %    OUTPUTS
+    %   OUTPUTS
     %       idxs : vector of indicies closest to the rolloff
     %      freqs : frequencies at idxs
     %       vals : values in mags matrix at indxs
