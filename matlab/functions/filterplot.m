@@ -11,7 +11,7 @@ function filterplot(Bcolor, Acolor, Bdiff, Adiff, fs, gain_offsets)
 rgb = genColors(0.3, 0.1, length(gain_offsets));
 xtk = 125 * 4.^(0:7);       % freq ticks
 ytk = [-100 -50 0];         % magnitude ticks [db]
-axs = [50 fs/2 -100 10];    % freq bounds, mag bounds
+axs = [125 fs/2 -100 10];    % freq bounds, mag bounds
 ylbl = 'Magnitude [dB]';    % y-axis label
 linew = 1.1;                % plot line width
 pltw = 750;                 % subplot width
@@ -48,7 +48,7 @@ end
 ylabel(ylbl);
 set(gca,'XTick', xtk, 'YTick', [-10 -5 0]);
 yticks([-10 -5 0]);
-axis([125 fs/2 -8 1])
+axis([axs([1,2] -8 1])
 set(gcf,'position',[300, 200, pltw, plth])
 plotSettings();
 hold off;

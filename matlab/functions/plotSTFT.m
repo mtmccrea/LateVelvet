@@ -6,5 +6,4 @@ function plotSTFT(X, N, hop, Fs)
         'Centered', false ...
         );
     colormap(flipud(bone))
-    hold on;
 end

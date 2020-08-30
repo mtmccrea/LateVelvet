@@ -18,6 +18,7 @@ function [mags, mags_norm, freqs, coeffs] = lpcData(signal, lpc_order, freq_reso
     if size(signal, 1) == 1
         signal =  signal';
     end
+    
     % handle whitening option
     whitenfilt = false; % default: analyse a whitening filter
     if nargin > 4
@@ -31,7 +32,7 @@ function [mags, mags_norm, freqs, coeffs] = lpcData(signal, lpc_order, freq_reso
     mags = zeros(freq_resolution, nchan);
     mags_norm = zeros(freq_resolution, nchan);
     freqs = zeros(freq_resolution, 1);
-    % 
+    
     for i = 1:nchan
         if whitenfilt
             [H, w] = freqz(coeffs(:, i), 1, freq_resolution);

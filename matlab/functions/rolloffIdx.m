@@ -17,16 +17,16 @@ function [idxs, freqs, vals] = rolloffIdx(mags, rolloff, min_freq, Fs)
     minFrqIdx = floor(min_freq/(Fs/2) * nFreqs);
     srchSpec = mags(minFrqIdx:end, :);
     
-    % find closest values, by index
-    [d, ix] = min(abs(srchSpec - rolloff));
+    % find closest values with their index
+    [d, mindex] = min(abs(srchSpec - rolloff));
     
     % restore index from min_freq offset
-    idxs = ix + minFrqIdx-1;    
+    idxs = mindex + minFrqIdx-1;    
     
     %     cols = 1:size(mags, 2);
     %     freqs = sub2ind(size(mags), idxs, cols);
     %     freqs = w(ix)/pi * (Fs/2);
-    freqs = Fs/2 / nFreqs * (ix-1);
+    freqs = Fs/2 / nFreqs * (idxs-1);
     
     vals = mags(idxs); % cutoff values in each segment
 end
